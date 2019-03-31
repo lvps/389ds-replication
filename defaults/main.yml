@@ -1,0 +1,16 @@
+---
+
+# Replication master settings
+
+rwmaster: false
+replication_nsds5replicaid: 7
+agreement_name: ExampleAgreement
+replica_host: replica.example.com
+init_replica: false
+
+# Replication replica settings
+
+roreplica: false
+# this will create LDAP user cn=replmanager,cn=config
+replication_user: replmanager
+replication_user_password: Admin123
