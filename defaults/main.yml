@@ -1,5 +1,14 @@
 ---
 
+rootdn: "cn=Directory Manager"
+#rootdn_password: secret
+use_starttls: true
+tls_certificate_public_trusted: true
+
+# Example used throughout section 15 of the Administration Guide
+replication_user: Replication Manager
+#replication_user_password: even-more-secret
+
 # Replication master settings
 
 rwmaster: false

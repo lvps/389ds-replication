@@ -1,2 +1,16 @@
 ---
-# tasks file for 389ds-replication-agreement
+- name: Prepare LDAP auth data
+  set_fact:
+    ldap_auth:
+      server_uri: "ldap://localhost" # TODO: there are 2 servers to configure, not just localhost
+      validate_certs: "{{ tls_certificate_public_trusted }}"
+      start_tls: "{{ use_starttls }}"
+      bind_dn: "{{ rootdn }}"
+      bind_pw: "{{ rootdn_password }}"
+
+
+- include: configure_replication_replica.yaml
+  when: false # roreplica
+
+- include: configure_replication_master.yaml
+  when: false # rwmaster

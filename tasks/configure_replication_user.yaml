@@ -1,18 +1,33 @@
 ---
-- name: Generate password hash for replication user
-  shell: /usr/bin/pwdhash  "{{ replication_user_password }}"
-  register: pwd_hash_raw
+#- name: Generate password hash for replication user
+  #shell: /usr/bin/pwdhash  "{{ replication_user_password }}"
+  #register: pwd_hash_raw
 
-- name: Make a pwd hash variable
-  set_fact: pwd_hash="{{ pwd_hash_raw.stdout }}"
+#- name: Make a pwd hash variable
+  #set_fact: pwd_hash="{{ pwd_hash_raw.stdout }}"
 
-- name: Copy ldif templates
-  template: src=templates/{{ item }}.j2 dest=/root/{{ item }}
-  with_items:
-   - replication_user.ldif
+# The supplier will bind with this account on the consumer, so the account should exist on the consumer
+- name: Add "supplier bind DN entry" to consumer
+  ldap_entry:
+    params: "{{ ldap_auth }}"
+    dn: "cn={{ replication_user }},cn=config"
+    objectClass:
+      - top
+      - device
+      - simpleSecurityObject
+    attributes:
+      cn: "{{ replication_user }}"
+      userPassword: "{{ replication_user_password }}"
+      nsIdleTimeout: 0 # TODO: make this configurable? 0 is only needed for initialization, since it may take a long time
+    state: present
 
-- name: Add replication user
-  shell: ldapmodify -D {{ rootdn }} -w {{ password }} -h localhost -v < /root/replication_user.ldif
-  register: results
-  failed_when: not((results.rc == 0)or(results.rc == 68))
-  changed_when: results.rc == 0
+# Allows password change, since if entry exists, ldap_entry doesn't update attributes
+- name: Set "supplier bind DN entry" attributes
+    params: "{{ ldap_auth }}"
+    dn: "cn={{ replication_user }},cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: exact
+  loop:
+  - { name: "userPassword", value: "{{ replication_user_password }}" }
+
