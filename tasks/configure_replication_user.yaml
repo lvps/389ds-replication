@@ -1,4 +1,5 @@
 ---
+# TODO: remove or rewrite the commented-out part
 #- name: Generate password hash for replication user
   #shell: /usr/bin/pwdhash  "{{ replication_user_password }}"
   #register: pwd_hash_raw

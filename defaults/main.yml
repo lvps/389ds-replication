@@ -5,9 +5,21 @@ rootdn: "cn=Directory Manager"
 use_starttls: true
 tls_certificate_public_trusted: true
 
+serverid: default
+suffix: dc=example,dc=com
+
 # Example used throughout section 15 of the Administration Guide
 replication_user: Replication Manager
 #replication_user_password: even-more-secret
+
+# Supplier settings
+
+# According to the "Configuration, Command, and File Reference":
+# For suppliers: 1 to 65534
+# For consumers and hubs: 65535
+supplier_replica_id: 1
+
+# --- TODO: Remove part below -------------
 
 # Replication master settings
 

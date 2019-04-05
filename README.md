@@ -29,7 +29,7 @@ TODO: this section
 License
 -------
 
-BSD
+Apache 2.0 for parts that I haven't done, the rest is MIT. Will remove all Apache 2.0 parts soon.
 
 Author Information
 ------------------

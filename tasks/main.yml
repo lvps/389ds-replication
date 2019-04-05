@@ -8,9 +8,11 @@
       bind_dn: "{{ rootdn }}"
       bind_pw: "{{ rootdn_password }}"
 
+- include: configure_supplier.yaml
+  when: supplier
 
-- include: configure_replication_replica.yaml
-  when: false # roreplica
+- include: configure_consumer.yaml
+  when: consumer
 
-- include: configure_replication_master.yaml
-  when: false # rwmaster
+- include: configure_replication_agreement.yaml
+  when: TODO

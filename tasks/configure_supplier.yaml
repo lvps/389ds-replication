@@ -1,0 +1,50 @@
+---
+- name: Create changelog configuration entry
+  ldap_entry:
+    params: "{{ ldap_auth }}"
+    dn: "cn=changelog5,cn=config"
+    objectClass:
+      - top
+      - extensibleObject
+    attributes:
+      cn: "changelog5"
+    state: present
+
+- name: Configure changelog
+  ldap_attr:
+    params: "{{ ldap_auth }}"
+    dn: "cn=changelog5,cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: exact
+  loop:
+  - { name: "nsslapd-changelogdir", value: "/var/lib/dirsrv/slapd-{{ serverid }}/changelogdb" }
+  - { name: "nsslapd-changelogmaxage", value: "10d" } # TODO: make configurable
+
+- name: Create Supplier Replica Entry
+  ldap_entry:
+    params: "{{ ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ suffix }}\",cn=mapping tree,cn=config"
+    objectClass:
+      - top
+      - nsds5replica
+      - extensibleObject
+    attributes:
+      cn: "replica"
+    state: present
+
+- name: Configure Supplier Replica Entry
+  ldap_attr:
+    params: "{{ ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ suffix }}\",cn=mapping tree,cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: exact
+  loop:
+  - { name: "nsds5replicaroot", value: "{{ suffix }}" }
+  - { name: "nsds5replicaid", value: "{{ supplier_replica_id }}" }
+  - { name: "nsds5replicatype", value: "3" } # 2 is consumer
+  - { name: "nsds5flags", value: "1" } # 1 = writes to changelog = is a supplier (use 0 for consumers)
+  - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
+  # This is already the default: keep "tombstone" for deleted entries for 1 week, to resolve conflicts in master-master replication
+  #- { name: "nsds5ReplicaPurgeDelay", value: "604800" }
