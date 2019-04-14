@@ -1,2 +1,37 @@
 ---
-# TODO: this file
+- name: Create Consumer Replica Entry
+  ldap_entry:
+    params: "{{ ldap_auth }}"
+    dn: "cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    objectClass:
+      - top
+      - nsds5replica
+      - extensibleObject
+    attributes:
+      cn: "replica"
+    state: present
+
+- name: Configure Consumer Replica Entry
+  ldap_attr:
+    params: "{{ ldap_auth }}"
+    dn: "cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: exact
+  loop:
+  - { name: "nsds5replicaroot", value: "{{ suffix }}" }
+  - { name: "nsds5replicaid", value: "65535" }
+  - { name: "nsds5replicatype", value: "2" } # consumer
+  - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
+  - { name: "nsds5flags", value: "0" } # 0 = does not write to changelog = is a consumer
+
+- name: Configure referral
+  ldap_attr:
+    params: "{{ ldap_auth }}"
+    dn: "cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: exact
+  loop:
+  - { name: "nsslapd-referral", value: "{{ consumer_referral_to_supplier | urlsplit('scheme') }}://{{ consumer_referral_to_supplier | urlsplit('netloc') }}/{{ suffix | replace('\"', '\\\"') }}" }
+  - { name: "nsslapd-state", value: "referral on update" }

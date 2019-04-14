@@ -1,5 +1,5 @@
 ---
-
+server_uri: "ldap://localhost"
 rootdn: "cn=Directory Manager"
 #rootdn_password: secret
 use_starttls: true
@@ -18,20 +18,4 @@ replication_user: Replication Manager
 # For suppliers: 1 to 65534
 # For consumers and hubs: 65535
 supplier_replica_id: 1
-
-# --- TODO: Remove part below -------------
-
-# Replication master settings
-
-rwmaster: false
-replication_nsds5replicaid: 7
-agreement_name: ExampleAgreement
-replica_host: replica.example.com
-init_replica: false
-
-# Replication replica settings
-
-roreplica: false
-# this will create LDAP user cn=replmanager,cn=config
-replication_user: replmanager
-replication_user_password: Admin123
+#consumer_referral_to_supplier: "ldap://supplier.example.com:389/"
