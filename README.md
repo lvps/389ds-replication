@@ -29,11 +29,4 @@ TODO: this section
 License
 -------
 
-Apache 2.0 for parts that I haven't done, the rest is MIT. Will remove all Apache 2.0 parts soon.
-
-Author Information
-------------------
-
-Modified by: lvps
-[Modified by](https://github.com/colbyprior/389-ldap-server/): Colby Prior
-[Original author](https://github.com/neoncyrex/389-ldap-server): Artemii Kropachev
+MIT.

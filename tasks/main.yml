@@ -1,4 +1,13 @@
 ---
+- set_fact:
+    instance_389ds_is_consumer: replica_role == 'consumer' or replica_role == 'both'
+    instance_389ds_is_supplier: replica_role == 'supplier' or replica_role == 'both'
+
+- assert:
+    that:
+      - instance_389ds_is_consumer or instance_389ds_is_supplier
+    msg: "This server is neither a consumer nor a supplier. Check that \"replica_role\" is set correctly."
+
 - name: Prepare LDAP auth data
   set_fact:
     ldap_auth:
@@ -8,11 +17,17 @@
       bind_dn: "{{ rootdn }}"
       bind_pw: "{{ rootdn_password }}"
 
-- include: configure_supplier.yaml
-  when: supplier
+# Set up consumer before supplier
+# TODO: is this really true or it's just "before starting replication"?
+
+- include: configure_replication_user.yaml
+  when: instance_389ds_is_consumer
 
 - include: configure_consumer.yaml
-  when: consumer
+  when: instance_389ds_is_consumer
+
+- include: configure_supplier.yaml
+  when: instance_389ds_is_supplier
 
 - include: configure_replication_agreement.yaml
-  when: TODO
+  when: instance_389ds_is_supplier

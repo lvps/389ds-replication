@@ -12,10 +12,15 @@ suffix: dc=example,dc=com
 replication_user: Replication Manager
 #replication_user_password: even-more-secret
 
-# Supplier settings
+#####################
+# Supplier settings #
+#####################
 
-# According to the "Configuration, Command, and File Reference":
-# For suppliers: 1 to 65534
-# For consumers and hubs: 65535
-supplier_replica_id: 1
+supplier_replica_id: 1 # For suppliers: 1 to 65534
+#consumer_uri: "ldap://consumer.example.com:389/"
+
+#####################
+# Consumer settings #
+#####################
+
 #consumer_referral_to_supplier: "ldap://supplier.example.com:389/"

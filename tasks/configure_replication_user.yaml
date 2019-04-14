@@ -31,4 +31,3 @@
     state: exact
   loop:
   - { name: "userPassword", value: "{{ replication_user_password }}" }
-

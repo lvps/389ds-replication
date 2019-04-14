@@ -31,6 +31,9 @@
       - extensibleObject
     attributes:
       cn: "replica"
+      # MUST attributes, cannot add them later
+      nsds5replicaroot: "{{ suffix }}"
+      nsds5replicaid: "{{ supplier_replica_id }}"
     state: present
 
 - name: Configure Supplier Replica Entry
