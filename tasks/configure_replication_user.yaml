@@ -24,6 +24,7 @@
 
 # Allows password change, since if entry exists, ldap_entry doesn't update attributes
 - name: Set "supplier bind DN entry" attributes
+  ldap_attr:
     params: "{{ ldap_auth }}"
     dn: "cn={{ replication_user }},cn=config"
     name: "{{ item.name }}"
