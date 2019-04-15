@@ -4,8 +4,16 @@
 # When setting up replication agreements, first set them up between all suppliers, then between the
 # suppliers and the hubs, and last between the hub and the consumers.
 
-- set_fact:
+- name: Set agreement name
+  set_fact:
     replica_cn: "agreement_with_{{ consumer_uri | urlsplit('hostname') | replace('.', '_') }}"
+
+- debug:
+    var: replica_cn
+
+# TODO: next task fails with
+# An exception occurred during task execution. To see the full traceback, use -vvv. The error was: UNWILLING_TO_PERFORM: {'desc': 'Server is unwilling to perform'}
+# fatal: [ldap-test-vm2]: FAILED! => {"changed": false, "details": "{'desc': 'Server is unwilling to perform'}", "msg": "Entry action failed."}
 
 # Add only to supplier, one for each consumer
 - name: "Add replication agreement with {{ consumer_uri | urlsplit('netloc') }} on supplier"

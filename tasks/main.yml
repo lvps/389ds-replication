@@ -26,8 +26,16 @@
 - include: configure_consumer.yaml
   when: instance_389ds_is_consumer
 
+# This will set up the server as a supplier ONLY,
+# to make it a supplier AND consumer these parameters should be
+# the same as for a consumer. This is already done in configure_consumer.yml.
+#
+# Basically:
+# A supplier is configured as a supplier, with a replication agreement.
+# A consumer is configured as a consumer, with no replication agreement.
+# A supplier + consumer is configured as a supplier, but with a replication agreement.
 - include: configure_supplier.yaml
-  when: instance_389ds_is_supplier
+  when: instance_389ds_is_supplier and not instance_389ds_is_consumer
 
 - include: configure_replication_agreement.yaml
   when: instance_389ds_is_supplier
