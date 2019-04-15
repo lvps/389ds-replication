@@ -1,12 +1,4 @@
 ---
-# TODO: remove or rewrite the commented-out part
-#- name: Generate password hash for replication user
-  #shell: /usr/bin/pwdhash  "{{ replication_user_password }}"
-  #register: pwd_hash_raw
-
-#- name: Make a pwd hash variable
-  #set_fact: pwd_hash="{{ pwd_hash_raw.stdout }}"
-
 # The supplier will bind with this account on the consumer, so the account should exist on the consumer
 - name: Add "supplier bind DN entry" to consumer
   ldap_entry:
@@ -32,3 +24,4 @@
     state: exact
   loop:
   - { name: "userPassword", value: "{{ replication_user_password }}" }
+  changed_when: false # Password always changes, but doesn't really change
