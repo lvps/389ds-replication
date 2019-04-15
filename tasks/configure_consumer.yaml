@@ -2,7 +2,7 @@
 - name: Create Consumer Replica Entry
   ldap_entry:
     params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    dn: "cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
       - nsds5replica
@@ -17,7 +17,7 @@
 - name: Configure Consumer Replica Entry
   ldap_attr:
     params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    dn: "cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
@@ -30,10 +30,10 @@
 - name: Configure referral
   ldap_attr:
     params: "{{ ldap_auth }}"
-    dn: "cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    dn: "cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsslapd-referral", value: "{{ consumer_referral_to_supplier | urlsplit('scheme') }}://{{ consumer_referral_to_supplier | urlsplit('netloc') }}/{{ suffix | replace('\"', '\\\"') }}" }
+  - { name: "nsslapd-referral", value: "{{ consumer_referral_to_supplier | urlsplit('scheme') }}://{{ consumer_referral_to_supplier | urlsplit('netloc') }}/{{ suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
   - { name: "nsslapd-state", value: "referral on update" }

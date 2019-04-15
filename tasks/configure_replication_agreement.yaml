@@ -5,13 +5,13 @@
 # suppliers and the hubs, and last between the hub and the consumers.
 
 - set_fact:
-  replica_cn: "agreement_with_{{ consumer_uri | urlsplit('hostname') | replace('.', '_') }}"
+    replica_cn: "agreement_with_{{ consumer_uri | urlsplit('hostname') | replace('.', '_') }}"
 
 # Add only to supplier, one for each consumer
 - name: "Add replication agreement with {{ consumer_uri | urlsplit('netloc') }} on supplier"
   ldap_entry:
     params: "{{ ldap_auth }}"
-    dn: "cn={{ replica_cn }},cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    dn: "cn={{ replica_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
       - nsds5ReplicationAgreement
@@ -25,7 +25,7 @@
 - name: Configure replication agreement on supplier
   ldap_attr:
     params: "{{ ldap_auth }}"
-    dn: "cn={{ replica_cn }},cn=replica,cn={{ suffix | replace('\"', '\\\"') }},cn=mapping tree,cn=config"
+    dn: "cn={{ replica_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact

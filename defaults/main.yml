@@ -18,6 +18,8 @@ replication_user: Replication Manager
 
 supplier_replica_id: 1 # For suppliers: 1 to 65534
 #consumer_uri: "ldap://consumer.example.com:389/"
+#replication_user_remote: Replication Manager
+#replication_user_password_remote: even-more-secret
 
 #####################
 # Consumer settings #
