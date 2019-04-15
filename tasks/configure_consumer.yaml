@@ -12,6 +12,7 @@
       # MUST attributes, cannot add them later
       nsds5replicaroot: "{{ suffix }}"
       nsds5replicaid: "65535"
+      nsds5replicatype: "2" # not a MUST but cannot be changed. Ever. Overwriting with the same value triggers an error.
     state: present
 
 - name: Configure Consumer Replica Entry
@@ -23,7 +24,6 @@
     state: exact
   loop:
   - { name: "nsds5replicaroot", value: "{{ suffix }}" }
-  - { name: "nsds5replicatype", value: "2" } # consumer
   - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
   - { name: "nsds5flags", value: "0" } # 0 = does not write to changelog = is a consumer
 
