@@ -30,7 +30,7 @@
       description: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible."
       nsds5replicatedattributelist: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
       nsds5ReplicatedAttributeListTotal: "(objectclass=*) $ EXCLUDE accountUnlockTime"
-      nsds5ReplicaEnabled: "off" # Start disabled
+      nsds5ReplicaEnabled: "'on' if begin_replication_immediately else 'off'"
     state: present
 
 - name: Configure replication agreement on supplier

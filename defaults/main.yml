@@ -11,6 +11,7 @@ suffix: dc=example,dc=com
 # Example used throughout section 15 of the Administration Guide
 replication_user: Replication Manager
 #replication_user_password: even-more-secret
+begin_replication_immediately: true
 
 #####################
 # Supplier settings #
