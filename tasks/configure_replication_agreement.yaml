@@ -6,47 +6,62 @@
 
 - name: Set agreement name
   set_fact:
-    replica_cn: "agreement_with_{{ consumer_uri | urlsplit('hostname') | replace('.', '_') }}"
-
-- debug:
-    var: replica_cn
-
-# TODO: next task fails with
-# An exception occurred during task execution. To see the full traceback, use -vvv. The error was: UNWILLING_TO_PERFORM: {'desc': 'Server is unwilling to perform'}
-# fatal: [ldap-test-vm2]: FAILED! => {"changed": false, "details": "{'desc': 'Server is unwilling to perform'}", "msg": "Entry action failed."}
+    agreement_cn: "agreement_with_{{ consumer_uri | urlsplit('hostname') | replace('.', '_') }}"
 
 # Add only to supplier, one for each consumer
 - name: "Add replication agreement with {{ consumer_uri | urlsplit('netloc') }} on supplier"
   ldap_entry:
     params: "{{ ldap_auth }}"
-    dn: "cn={{ replica_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    dn: "cn={{ agreement_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
       - nsds5ReplicationAgreement
     attributes:
-      cn: "{{ replica_cn }}"
+      cn: "{{ agreement_cn }}"
       # these attributes cannot be modified once set, anyway
-      nsDS5ReplicaHost: "{{ consumer_uri | urlsplit('hostname') }}"
-      nsDS5ReplicaTransportInfo: "{{ 'SSL' if ( consumer_uri | urlsplit('scheme') | lower ) == 'ldaps' else 'TLS' }}" # SSL = LDAPS, TLS = StartTLS.
+      nsds5ReplicaHost: "{{ consumer_uri | urlsplit('hostname') }}"
+      nsds5ReplicaTransportInfo: "{{ 'SSL' if ( consumer_uri | urlsplit('scheme') | lower ) == 'ldaps' else 'TLS' }}" # SSL = LDAPS, TLS = StartTLS.
+      # These ones... can, I think? However, adding the entry fails if they're not present
+      nsds5replicaport: "{{ consumer_uri | urlsplit('port') }}"
+      nsds5ReplicaBindDN: "cn={{ replication_user_remote | default(replication_user) }},cn=config"
+      nsds5ReplicaCredentials: "{{ replication_user_password_remote | default(replication_user_password) }}"
+      nsds5replicabindmethod: SIMPLE
+      nsds5replicaroot: "{{ suffix }}"
+      description: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible."
+      nsds5replicatedattributelist: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
+      nsds5ReplicatedAttributeListTotal: "(objectclass=*) $ EXCLUDE accountUnlockTime"
+      nsds5replicaupdateschedule: "0000-2359 0123456"
+      nsds5ReplicaEnabled: "off" # Start disabled
     state: present
 
 - name: Configure replication agreement on supplier
   ldap_attr:
     params: "{{ ldap_auth }}"
-    dn: "cn={{ replica_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    dn: "cn={{ agreement_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
   - { name: "nsds5replicaport", value: "{{ consumer_uri | urlsplit('port') }}" }
   - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user_remote | default(replication_user) }},cn=config" }
-  - { name: "nsds5ReplicaCredentials", value: "{{ replication_user_password_remote | default(replication_user_password) }}" }
   - { name: "nsds5replicabindmethod", value: "SIMPLE" } # TODO: SASL/PLAIN doesn't seem to be allowed?
   - { name: "nsds5replicaroot", value: "{{ suffix }}" }
   - { name: "description", value: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible." }
   # By default nothing is excluded, but those are used in the exmaples. Probably there's a good reason for why they are excluded.
   # TODO: make these configurable
   - { name: "nsds5replicatedattributelist", value: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof" }
-  - { name: "nsDS5ReplicatedAttributeListTotal", value: "(objectclass=*) $ EXCLUDE accountUnlockTime" }
+  - { name: "nsds5ReplicatedAttributeListTotal", value: "(objectclass=*) $ EXCLUDE accountUnlockTime" }
+  - { name: "nsds5ReplicaEnabled", value: "off" }
 
-  # nsds5replicaupdateschedule can be used to "pause" replication (see Configuration and other stuff Reference), nice
+# The exact same as above, but with "changed_when: false" because that "changed" annoyed me.
+# The downside is that if password actually changes, you'll see that nothing has changed according to Ansible, but it did work.
+- name: Configure password on replication agreement on supplier
+  ldap_attr:
+    params: "{{ ldap_auth }}"
+    dn: "cn={{ agreement_cn }},cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    name: "nsds5ReplicaCredentials"
+    values: "{{ replication_user_password_remote | default(replication_user_password) }}"
+    state: exact
+  changed_when: false
+
+# nsds5replicaupdateschedule can be used to "pause" replication (see Configuration and other stuff Reference), nice

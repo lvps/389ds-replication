@@ -17,25 +17,27 @@
       bind_dn: "{{ rootdn }}"
       bind_pw: "{{ rootdn_password }}"
 
-# Set up consumer before supplier
-# TODO: is this really true or it's just "before starting replication"?
+# There are 3 possible configurations:
+# Supplier ONLY: is configured as a supplier, with a replication agreement.
+# Consumer ONYL: is configured as a consumer, with no replication agreement.
+# Supplier + consumer (master/both): is configured as a supplier, but with a replication agreement.
 
+# Supplier or master/both
+- include: configure_changelog.yaml
+  when: instance_389ds_is_supplier
+
+# Consumer or master/both
 - include: configure_replication_user.yaml
   when: instance_389ds_is_consumer
 
+# Consumer
 - include: configure_consumer.yaml
-  when: instance_389ds_is_consumer
+  when: instance_389ds_is_consumer and not instance_389ds_is_supplier
 
-# This will set up the server as a supplier ONLY,
-# to make it a supplier AND consumer these parameters should be
-# the same as for a consumer. This is already done in configure_consumer.yml.
-#
-# Basically:
-# A supplier is configured as a supplier, with a replication agreement.
-# A consumer is configured as a consumer, with no replication agreement.
-# A supplier + consumer is configured as a supplier, but with a replication agreement.
+# Supplier or master/both
 - include: configure_supplier.yaml
-  when: instance_389ds_is_supplier and not instance_389ds_is_consumer
+  when: instance_389ds_is_supplier
 
+# Supplier or master/both
 - include: configure_replication_agreement.yaml
   when: instance_389ds_is_supplier

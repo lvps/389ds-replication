@@ -24,8 +24,8 @@
     state: exact
   loop:
   - { name: "nsds5replicaroot", value: "{{ suffix }}" }
-  - { name: "nsds5replicaid", value: "{{ supplier_replica_id }}" }
-  - { name: "nsds5flags", value: "1" } # 1 = writes to changelog = is a supplier (use 0 for consumers)
   - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
+  - { name: "nsds5flags", value: "1" } # 1 = writes to changelog = is a supplier (use 0 for consumers)
+  - { name: "nsds5replicaid", value: "{{ supplier_replica_id }}" }
   # This is already the default: keep "tombstone" for deleted entries for 1 week, to resolve conflicts in master-master replication
   #- { name: "nsds5ReplicaPurgeDelay", value: "604800" }
