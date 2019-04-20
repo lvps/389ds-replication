@@ -18,9 +18,9 @@
       bind_pw: "{{ rootdn_password }}"
 
 # There are 3 possible configurations:
-# Supplier ONLY: is configured as a supplier, with a replication agreement.
-# Consumer ONYL: is configured as a consumer, with no replication agreement.
-# Supplier + consumer (master/both): is configured as a supplier, but with a replication agreement.
+# Supplier ONLY: is configured as a supplier, with a replication agreement and no replication user.
+# Consumer ONLY: is configured as a consumer, with no replication agreement but a replication user.
+# Supplier + consumer (master/both): is configured as a supplier, with a replication agreement and a replication user.
 
 # Supplier or master/both
 - include: configure_changelog.yml
