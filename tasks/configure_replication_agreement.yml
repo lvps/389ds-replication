@@ -28,8 +28,8 @@
       nsds5replicabindmethod: SIMPLE
       nsds5replicaroot: "{{ suffix }}"
       description: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible."
-      nsds5replicatedattributelist: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
-      nsds5ReplicatedAttributeListTotal: "(objectclass=*) $ EXCLUDE accountUnlockTime"
+      nsds5replicatedattributelist: "{{ replica_attributes_list }}"
+      nsds5ReplicatedAttributeListTotal: "{{ replica_attributes_list_total }}"
       nsds5ReplicaEnabled: "{{ 'on' if begin_replication_immediately else 'off' }}"
     state: present
 
@@ -46,10 +46,8 @@
   - { name: "nsds5replicabindmethod", value: "SIMPLE" } # TODO: SASL/PLAIN doesn't seem to be allowed?
   - { name: "nsds5replicaroot", value: "{{ suffix }}" }
   - { name: "description", value: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible." }
-  # By default nothing is excluded, but those are used in the exmaples. Probably there's a good reason for why they are excluded.
-  # TODO: make these configurable
-  - { name: "nsds5replicatedattributelist", value: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof" }
-  - { name: "nsds5ReplicatedAttributeListTotal", value: "(objectclass=*) $ EXCLUDE accountUnlockTime" }
+  - { name: "nsds5replicatedattributelist", value: "{{ replica_attributes_list }}" }
+  - { name: "nsds5ReplicatedAttributeListTotal", value: "{{ 'on' if begin_replication_immediately else 'off' }}" }
 
 # The exact same as above, but with "changed_when: false" because that "changed" annoyed me.
 # The downside is that if password actually changes, you'll see that nothing has changed according to Ansible, but it did work.

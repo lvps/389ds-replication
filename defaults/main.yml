@@ -22,6 +22,10 @@ supplier_replica_id: 1 # For suppliers: 1 to 65534
 #replication_user_remote: Replication Manager
 #replication_user_password_remote: even-more-secret
 
+# By default nothing is excluded, but those are used in the exmaples. Probably there's a good reason for why they are excluded.
+replica_attributes_list: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
+replica_attributes_list_total: "(objectclass=*) $ EXCLUDE accountUnlockTime"
+
 #####################
 # Consumer settings #
 #####################
