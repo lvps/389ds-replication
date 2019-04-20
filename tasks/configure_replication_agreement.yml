@@ -47,7 +47,7 @@
   - { name: "nsds5replicaroot", value: "{{ suffix }}" }
   - { name: "description", value: "Agreement between this server (supplier) and {{ consumer_uri }} (consumer). Managed by Ansible." }
   - { name: "nsds5replicatedattributelist", value: "{{ replica_attributes_list }}" }
-  - { name: "nsds5ReplicatedAttributeListTotal", value: "{{ 'on' if begin_replication_immediately else 'off' }}" }
+  - { name: "nsds5ReplicatedAttributeListTotal", value: "{{ replica_attributes_list_total }}" }
 
 # The exact same as above, but with "changed_when: false" because that "changed" annoyed me.
 # The downside is that if password actually changes, you'll see that nothing has changed according to Ansible, but it did work.
