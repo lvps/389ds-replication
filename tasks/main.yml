@@ -1,7 +1,7 @@
 ---
 - set_fact:
-    instance_389ds_is_consumer: replica_role == 'consumer' or replica_role == 'both'
-    instance_389ds_is_supplier: replica_role == 'supplier' or replica_role == 'both'
+    instance_389ds_is_consumer: "{{ replica_role == 'consumer' or replica_role == 'both' }}"
+    instance_389ds_is_supplier: "{{ replica_role == 'supplier' or replica_role == 'both' }}"
 
 - assert:
     that:
