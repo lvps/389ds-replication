@@ -35,5 +35,7 @@
     values: "{{ item.value }}"
     state: exact
   loop:
-    - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://{{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}/{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
+    - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://\
+    {{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}\
+    /{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
     - { name: "nsslapd-state", value: "referral on update" }
