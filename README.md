@@ -157,6 +157,14 @@ to the consumer:
       dirsrv_supplier_replica_id: 2
 ```
 
+## Known bugs
+
+If `dirsrv_replication_user_password` is changed, no change is reported: this
+is because password actually changes on every run (Ansible can't tell if the
+previous encrypted password is the same as the new one, so it will be
+changed and re-encrypted), but there's a `changed_when: false` to hide that
+detail.
+
 ## License
 
 MIT.
