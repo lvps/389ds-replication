@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: lvps
   license: MIT
@@ -5,7 +6,7 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-      - 7
+        - 7
   galaxy_tags:
     - ldap
 dependencies: []

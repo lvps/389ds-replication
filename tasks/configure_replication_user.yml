@@ -11,7 +11,7 @@
     attributes:
       cn: "{{ dirsrv_replication_user }}"
       userPassword: "{{ dirsrv_replication_user_password }}"
-      nsIdleTimeout: 0 # TODO: make this configurable? 0 is only needed for initialization, since it may take a long time
+      nsIdleTimeout: 0  # TODO: make this configurable? 0 is only needed for initialization, since it may take a long time
     state: present
 
 # Allows password change, since if entry exists, ldap_entry doesn't update attributes
@@ -23,5 +23,5 @@
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "userPassword", value: "{{ dirsrv_replication_user_password }}" }
-  changed_when: false # Password always changes, but doesn't really change
+    - { name: "userPassword", value: "{{ dirsrv_replication_user_password }}" }
+  changed_when: false  # Password always changes, but doesn't really change

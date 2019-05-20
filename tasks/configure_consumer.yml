@@ -12,7 +12,7 @@
       # MUST attributes, cannot add them later
       nsds5replicaroot: "{{ dirsrv_suffix }}"
       nsds5replicaid: "65535"
-      nsds5replicatype: "2" # not a MUST but cannot be changed. Ever. Overwriting with the same value triggers an error.
+      nsds5replicatype: "2"  # not a MUST but cannot be changed. Ever. Overwriting with the same value triggers an error.
     state: present
 
 - name: Configure Consumer Replica Entry
@@ -23,9 +23,9 @@
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
-  - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user }},cn=config" }
-  - { name: "nsds5flags", value: "0" } # 0 = does not write to changelog = is a consumer
+    - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
+    - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user }},cn=config" }
+    - { name: "nsds5flags", value: "0" }  # 0 = does not write to changelog = is a consumer
 
 - name: Configure referral
   ldap_attr:
@@ -35,5 +35,5 @@
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://{{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}/{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
-  - { name: "nsslapd-state", value: "referral on update" }
+    - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://{{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}/{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
+    - { name: "nsslapd-state", value: "referral on update" }
