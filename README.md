@@ -125,7 +125,7 @@ to the consumer:
 
 ### Multi-master with two masters
 
-```
+```yaml
 - hosts: mm1
   become: true
   roles:
@@ -141,7 +141,7 @@ to the consumer:
       dirsrv_supplier_replica_id: 1
 ```
 
-```
+```yaml
 - hosts: mm2
   become: true
   roles:
