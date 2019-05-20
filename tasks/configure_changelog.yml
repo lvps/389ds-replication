@@ -1,7 +1,7 @@
 ---
 - name: Create changelog configuration entry
   ldap_entry:
-    params: "{{ ldap_auth }}"
+    params: "{{ dirsrv_ldap_auth }}"
     dn: "cn=changelog5,cn=config"
     objectClass:
       - top
@@ -10,16 +10,16 @@
       cn: "changelog5"
       # Fails if this is not set, although it's not a MUST attribute
       # (but there's dark magic taking place with extensibleObject)
-      nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ serverid }}/changelogdb"
+      nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
     state: present
 
 - name: Configure changelog
   ldap_attr:
-    params: "{{ ldap_auth }}"
+    params: "{{ dirsrv_ldap_auth }}"
     dn: "cn=changelog5,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsslapd-changelogdir", value: "/var/lib/dirsrv/slapd-{{ serverid }}/changelogdb" }
-  - { name: "nsslapd-changelogmaxage", value: "10d" } # TODO: make configurable
+  - { name: "nsslapd-changelogdir", value: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb" }
+  - { name: "nsslapd-changelogmaxage", value: "{{ dirsrv_changelog_max_age }}" }

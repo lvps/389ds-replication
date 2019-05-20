@@ -1,43 +1,46 @@
 ---
-- set_fact:
-    instance_389ds_is_consumer: "{{ replica_role == 'consumer' or replica_role == 'both' }}"
-    instance_389ds_is_supplier: "{{ replica_role == 'supplier' or replica_role == 'both' }}"
+- name: Decide if server is supplier or consumer
+  set_fact:
+    dirsrv_instance_is_consumer: "{{ dirsrv_replica_role == 'consumer' or dirsrv_replica_role == 'both' }}"
+    dirsrv_instance_is_supplier: "{{ dirsrv_replica_role == 'supplier' or dirsrv_replica_role == 'both' }}"
 
-- assert:
+- name: Check that replica role is correctly configured
+  assert:
     that:
-      - instance_389ds_is_consumer or instance_389ds_is_supplier
-    msg: "This server is neither a consumer nor a supplier. Check that \"replica_role\" is set correctly."
+      - dirsrv_instance_is_consumer or dirsrv_instance_is_supplier
+    msg: "This server is neither a consumer nor a supplier. Check that \"dirsrv_replica_role\" is set correctly."
 
 - name: Prepare LDAP auth data
   set_fact:
-    ldap_auth:
-      server_uri: "{{ server_uri }}"
-      validate_certs: "{{ tls_certificate_public_trusted }}"
-      start_tls: "{{ use_starttls }}"
-      bind_dn: "{{ rootdn }}"
-      bind_pw: "{{ rootdn_password }}"
+    dirsrv_ldap_auth:
+      server_uri: "{{ dirsrv_uri }}"
+      validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+      start_tls: "{{ dirsrv_use_starttls }}"
+      bind_dn: "{{ dirsrv_rootdn }}"
+      bind_pw: "{{ dirsrv_rootdn_password }}"
 
 # There are 3 possible configurations:
-# Supplier ONLY: is configured as a supplier, with a replication agreement and no replication user.
-# Consumer ONLY: is configured as a consumer, with no replication agreement but a replication user.
-# Supplier + consumer (master/both): is configured as a supplier, with a replication agreement and a replication user.
+# Supplier ONLY: ✔ changelog, ✔ supplier config, ✘ consumer config, ✔ replication agreement, ✘ replication user.
+# Consumer ONLY: ✘ changelog, ✘ supplier config, ✔ consumer config, ✘ replication agreement, ✔ replication user.
+# Both (master): ✔ changelog, ✔ supplier config, ✘ consumer config, ✔ replication agreement, ✔ replication user.
+# And there's a fourth one, hub, not supported by this role.
 
 # Supplier or master/both
 - include: configure_changelog.yml
-  when: instance_389ds_is_supplier
+  when: dirsrv_instance_is_supplier
 
 # Consumer or master/both
 - include: configure_replication_user.yml
-  when: instance_389ds_is_consumer
+  when: dirsrv_instance_is_consumer
 
 # Consumer
 - include: configure_consumer.yml
-  when: instance_389ds_is_consumer and not instance_389ds_is_supplier
+  when: dirsrv_instance_is_consumer and not dirsrv_instance_is_supplier
 
 # Supplier or master/both
 - include: configure_supplier.yml
-  when: instance_389ds_is_supplier
+  when: dirsrv_instance_is_supplier
 
 # Supplier or master/both
 - include: configure_replication_agreement.yml
-  when: instance_389ds_is_supplier
+  when: dirsrv_instance_is_supplier

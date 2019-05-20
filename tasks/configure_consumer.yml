@@ -1,8 +1,8 @@
 ---
 - name: Create Consumer Replica Entry
   ldap_entry:
-    params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
       - nsds5replica
@@ -10,30 +10,30 @@
     attributes:
       cn: "replica"
       # MUST attributes, cannot add them later
-      nsds5replicaroot: "{{ suffix }}"
+      nsds5replicaroot: "{{ dirsrv_suffix }}"
       nsds5replicaid: "65535"
       nsds5replicatype: "2" # not a MUST but cannot be changed. Ever. Overwriting with the same value triggers an error.
     state: present
 
 - name: Configure Consumer Replica Entry
   ldap_attr:
-    params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsds5replicaroot", value: "{{ suffix }}" }
-  - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
+  - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
+  - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user }},cn=config" }
   - { name: "nsds5flags", value: "0" } # 0 = does not write to changelog = is a consumer
 
 - name: Configure referral
   ldap_attr:
-    params: "{{ ldap_auth }}"
-    dn: "cn=\"{{ suffix  }}\",cn=mapping tree,cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsslapd-referral", value: "{{ consumer_referral_to_supplier | urlsplit('scheme') }}://{{ consumer_referral_to_supplier | urlsplit('netloc') }}/{{ suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
+  - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://{{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}/{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
   - { name: "nsslapd-state", value: "referral on update" }

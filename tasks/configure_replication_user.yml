@@ -2,26 +2,26 @@
 # The supplier will bind with this account on the consumer, so the account should exist on the consumer
 - name: Add "supplier bind DN entry" to consumer
   ldap_entry:
-    params: "{{ ldap_auth }}"
-    dn: "cn={{ replication_user }},cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn={{ dirsrv_replication_user }},cn=config"
     objectClass:
       - top
       - device
       - simpleSecurityObject
     attributes:
-      cn: "{{ replication_user }}"
-      userPassword: "{{ replication_user_password }}"
+      cn: "{{ dirsrv_replication_user }}"
+      userPassword: "{{ dirsrv_replication_user_password }}"
       nsIdleTimeout: 0 # TODO: make this configurable? 0 is only needed for initialization, since it may take a long time
     state: present
 
 # Allows password change, since if entry exists, ldap_entry doesn't update attributes
 - name: Set "supplier bind DN entry" attributes
   ldap_attr:
-    params: "{{ ldap_auth }}"
-    dn: "cn={{ replication_user }},cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn={{ dirsrv_replication_user }},cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "userPassword", value: "{{ replication_user_password }}" }
+  - { name: "userPassword", value: "{{ dirsrv_replication_user_password }}" }
   changed_when: false # Password always changes, but doesn't really change

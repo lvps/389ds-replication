@@ -1,8 +1,8 @@
 ---
 - name: Create Supplier Replica Entry
   ldap_entry:
-    params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn=\"{{ suffix }}\",cn=mapping tree,cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
       - nsds5replica
@@ -10,22 +10,22 @@
     attributes:
       cn: "replica"
       # MUST attributes, cannot add them later
-      nsds5replicaroot: "{{ suffix }}"
-      nsds5replicaid: "{{ supplier_replica_id }}"
+      nsds5replicaroot: "{{ dirsrv_suffix }}"
+      nsds5replicaid: "{{ dirsrv_supplier_replica_id }}"
       nsds5replicatype: "3" # Cannot be changed later
     state: present
 
 - name: Configure Supplier Replica Entry
   ldap_attr:
-    params: "{{ ldap_auth }}"
-    dn: "cn=replica,cn=\"{{ suffix }}\",cn=mapping tree,cn=config"
+    params: "{{ dirsrv_ldap_auth }}"
+    dn: "cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
   loop:
-  - { name: "nsds5replicaroot", value: "{{ suffix }}" }
-  - { name: "nsds5ReplicaBindDN", value: "cn={{ replication_user }},cn=config" }
+  - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
+  - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user }},cn=config" }
   - { name: "nsds5flags", value: "1" } # 1 = writes to changelog = is a supplier (use 0 for consumers)
-  - { name: "nsds5replicaid", value: "{{ supplier_replica_id }}" }
+  - { name: "nsds5replicaid", value: "{{ dirsrv_supplier_replica_id }}" }
   # This is already the default: keep "tombstone" for deleted entries for 1 week, to resolve conflicts in master-master replication
   #- { name: "nsds5ReplicaPurgeDelay", value: "604800" }

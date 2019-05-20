@@ -1,33 +1,34 @@
 ---
-server_uri: "ldap://localhost"
-rootdn: "cn=Directory Manager"
-#rootdn_password: secret
-use_starttls: true
-tls_certificate_public_trusted: true
+dirsrv_uri: "ldap://localhost"
+dirsrv_rootdn: "cn=Directory Manager"
+#dirsrv_rootdn_password: secret
+dirsrv_use_starttls: true
+dirsrv_tls_certificate_trusted: true
 
-serverid: default
-suffix: dc=example,dc=com
-
-# Example used throughout section 15 of the Administration Guide
-replication_user: Replication Manager
-#replication_user_password: even-more-secret
-begin_replication_immediately: true
+dirsrv_serverid: default
+dirsrv_suffix: dc=example,dc=local
 
 #####################
 # Supplier settings #
 #####################
 
-supplier_replica_id: 1 # For suppliers: 1 to 65534
-#consumer_uri: "ldap://consumer.example.com:389/"
-#replication_user_remote: Replication Manager
-#replication_user_password_remote: even-more-secret
+dirsrv_supplier_replica_id: 1 # For suppliers: 1 to 65534
+#dirsrv_consumer_uri: "ldap://consumer.example.com:389/"
+#dirsrv_replication_user_remote: Replication Manager
+#dirsrv_replication_user_password_remote: even-more-secret
+dirsrv_changelog_max_age: "10d"
 
 # By default nothing is excluded, but those are used in the exmaples. Probably there's a good reason for why they are excluded.
-replica_attributes_list: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
-replica_attributes_list_total: "(objectclass=*) $ EXCLUDE accountUnlockTime"
+dirsrv_replica_attributes_list: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
+dirsrv_replica_attributes_list_total: "(objectclass=*) $ EXCLUDE accountUnlockTime"
 
 #####################
 # Consumer settings #
 #####################
 
-#consumer_referral_to_supplier: "ldap://supplier.example.com:389/"
+# Example used throughout section 15 of the Administration Guide
+dirsrv_replication_user: Replication Manager
+#dirsrv_replication_user_password: even-more-secret
+dirsrv_begin_replication_immediately: true
+
+#dirsrv_consumer_referral_to_supplier: "ldap://supplier.example.com:389/"
