@@ -101,7 +101,7 @@ database:
 
   roles:
     -
-      role: 389ds-replication
+      role: lvps.389ds_replication
       dirsrv_replica_role: consumer
       dirsrv_suffix: "dc=example,dc=local"
       dirsrv_uri: "ldap://localhost"
@@ -119,7 +119,7 @@ to the consumer:
 
   roles:
     -
-      role: 389ds-replication
+      role: lvps.389ds_replication
       dirsrv_replica_role: supplier
       dirsrv_suffix: "dc=example,dc=local"
       dirsrv_uri: "ldap://localhost"
@@ -136,7 +136,7 @@ to the consumer:
   become: true
   roles:
     -
-      role: 389ds-replication
+      role: lvps.389ds_replication
       dirsrv_replica_role: 'both'
       dirsrv_suffix: "dc=example,dc=local"
       dirsrv_uri: "ldap://localhost"
@@ -152,7 +152,7 @@ to the consumer:
   become: true
   roles:
     -
-      role: 389ds-replication
+      role: lvps.389ds_replication
       dirsrv_replica_role: 'both'
       dirsrv_suffix: "dc=example,dc=local"
       dirsrv_uri: "ldap://localhost"
