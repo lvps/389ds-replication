@@ -1,6 +1,12 @@
 # 389ds-replication
 
+[![Ansible Galaxy](https://img.shields.io/ansible/role/40566.svg)](https://galaxy.ansible.com/lvps/389ds_replication)
+
 Configure replication between 389DS server (LDAP server) instances.
+
+```shell
+ansible-galaxy install lvps.389ds_replication
+```
 
 ## Requirements
 
@@ -161,8 +167,8 @@ to the consumer:
 
 If `dirsrv_replication_user_password` is changed, no change is reported: this
 is because password actually changes on every run (Ansible can't tell if the
-previous encrypted password is the same as the new one, so it will be
-changed and re-encrypted), but there's a `changed_when: false` to hide that
+previous hashed password is the same as the new one, so it will be
+changed and hashed again), but there's a `changed_when: false` to hide that
 detail.
 
 ## License
