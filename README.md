@@ -29,6 +29,7 @@ ansible-galaxy install lvps.389ds_replication
 | dirsrv_consumer_uri                     | "ldap://consumer.example.com:389/"                                             | Full URI, including port, that the supplier will connect to and perform replication by pushing changes                                                                                                                                                                                                                                                                                                                   | **No**         | SB   |
 | dirsrv_replication_user_remote          | Replication Manager                                                            | User account that exists on the consumer. The supplier will bind with this account to perform replication. "Replication Manager" means that the account is "cn=Replication Manager,cn=config"                                                                                                                                                                                                                            | Yes            | SB   |
 | dirsrv_replication_user_password_remote |                                                                                | Password for the replication user (Replication Manager) account                                                                                                                                                                                                                                                                                                                                                          | Yes            | SB   |
+| dirsrv_replica_bind_method              | "PLAIN"                                                                        | Bind method that supplier uses to connect to the consumer (SIMPLE, PLAIN, SASL)                                                                                                                                                                                                                                                                                                                                          | Yes            | SB   |
 | dirsrv_changelog_max_age                | "10d"                                                                          | Sets the value of `nsslapd-changelogmaxage`                                                                                                                                                                                                                                                                                                                                                                              | Yes            | SB   |
 | dirsrv_replica_attributes_list          | "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof" | Sets the value of `nsds5ReplicatedAttributeList`, the default of this variable is use throughout examples in the documentation                                                                                                                                                                                                                                                                                           | Yes            | SB   |
 | dirsrv_replica_attributes_list_total    | "(objectclass=*) $ EXCLUDE accountUnlockTime"                                  | Sets the value of `nsds5ReplicatedAttributeListTotal`, the default of this variable is use throughout examples in the documentation                                                                                                                                                                                                                                                                                      | Yes            | SB   |
@@ -69,7 +70,7 @@ it only configures replication between existing servers.
 
 ## Example Playbook
 
-More example, including 389DS installation from the ground up and the needed
+More examples, including 389DS installation from the ground up and the needed
 Vagrant configs to test them are available in the [389ds-examples](https://github.com/lvps/389ds-examples/)
 repository.
 
@@ -77,7 +78,7 @@ Note that, usually, replication doesn't start immediately because the
 ["replica generation" is different](https://github.com/colbyprior/389-ldap-server/pull/1#issuecomment-442694193)
 between the servers. This can be fixed with the "replica refresh" procedure,
 which is described for example in [section 15.2.5](https://access.redhat.com/documentation/en-us/red_hat_directory_server/10/html/administration_guide/managing_replication-configuring-replication-cmd#Configuring-Replication-InitializingConsumers-cmd)
-of the Administration Guide. You will need to perform it suppliers or
+of the Administration Guide. You will need to perform it on suppliers or
 servers with role "both".
 
 Basically, doing a "replica refresh" will forcefully push the database from one
