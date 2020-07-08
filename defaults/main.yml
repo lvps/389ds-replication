@@ -8,6 +8,9 @@ dirsrv_tls_certificate_trusted: true
 dirsrv_serverid: default
 dirsrv_suffix: dc=example,dc=local
 
+# SIMPLE, PLAIN, SASL. 
+dirsrv_replica_bind_method: 'PLAIN'
+
 #####################
 # Supplier settings #
 #####################
@@ -18,7 +21,7 @@ dirsrv_supplier_replica_id: 1  # For suppliers: 1 to 65534
 # dirsrv_replication_user_password_remote: even-more-secret
 dirsrv_changelog_max_age: "10d"
 
-# By default nothing is excluded, but those are used in the exmaples. Probably there's a good reason for why they are excluded.
+# By default nothing is excluded, but those are used in the examples. Probably there's a good reason for why they are excluded.
 dirsrv_replica_attributes_list: "(objectclass=*) $ EXCLUDE authorityRevocationList accountUnlockTime memberof"
 dirsrv_replica_attributes_list_total: "(objectclass=*) $ EXCLUDE accountUnlockTime"
 

@@ -11,7 +11,11 @@
 # Add only to supplier, one for each consumer
 - name: "Add replication agreement with {{ dirsrv_consumer_uri | urlsplit('netloc') }} on supplier"
   ldap_entry:
-    params: "{{ dirsrv_ldap_auth }}"
+    server_uri: "{{ dirsrv_server_uri }}"
+    validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+    start_tls: "{{ dirsrv_starttls_early }}"
+    bind_dn: "{{ dirsrv_rootdn }}"
+    bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix  }}\",cn=mapping tree,cn=config"
     objectClass:
       - top
@@ -25,7 +29,7 @@
       nsds5replicaport: "{{ '389' if not dirsrv_consumer_uri|urlsplit('port') else dirsrv_consumer_uri|urlsplit('port') }}"
       nsds5ReplicaBindDN: "cn={{ dirsrv_replication_user_remote | default(dirsrv_replication_user) }},cn=config"
       nsds5ReplicaCredentials: "{{ dirsrv_replication_user_password_remote | default(dirsrv_replication_user_password) }}"
-      nsds5replicabindmethod: SIMPLE
+      nsds5replicabindmethod: "{{ dirsrv_replica_bind_method }}"
       nsds5replicaroot: "{{ dirsrv_suffix }}"
       description: "Agreement between this server (supplier) and {{ dirsrv_consumer_uri }} (consumer). Managed by Ansible."
       nsds5replicatedattributelist: "{{ dirsrv_replica_attributes_list }}"
@@ -35,7 +39,11 @@
 
 - name: Configure replication agreement on supplier
   ldap_attr:
-    params: "{{ dirsrv_ldap_auth }}"
+    server_uri: "{{ dirsrv_server_uri }}"
+    validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+    start_tls: "{{ dirsrv_starttls_early }}"
+    bind_dn: "{{ dirsrv_rootdn }}"
+    bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix  }}\",cn=mapping tree,cn=config"
     name: "{{ item.name }}"
     values: "{{ item.value }}"
@@ -43,7 +51,7 @@
   loop:
     - { name: "nsds5replicaport", value: "{{ '389' if not dirsrv_consumer_uri|urlsplit('port') else dirsrv_consumer_uri|urlsplit('port') }}" }
     - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user_remote | default(dirsrv_replication_user) }},cn=config" }
-    - { name: "nsds5replicabindmethod", value: "SIMPLE" }  # TODO: SASL/PLAIN doesn't seem to be allowed?
+    - { name: "nsds5replicabindmethod", value: "{{ dirsrv_replica_bind_method }}" }
     - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
     - { name: "description", value: "Agreement between this server (supplier) and {{ dirsrv_consumer_uri }} (consumer). Managed by Ansible." }
     - { name: "nsds5replicatedattributelist", value: "{{ dirsrv_replica_attributes_list }}" }
@@ -53,7 +61,11 @@
 # The downside is that if password actually changes, you'll see that nothing has changed according to Ansible, but it did work.
 - name: Configure password on replication agreement on supplier
   ldap_attr:
-    params: "{{ dirsrv_ldap_auth }}"
+    server_uri: "{{ dirsrv_server_uri }}"
+    validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+    start_tls: "{{ dirsrv_starttls_early }}"
+    bind_dn: "{{ dirsrv_rootdn }}"
+    bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
     name: "nsds5ReplicaCredentials"
     values: "{{ dirsrv_replication_user_password_remote | default(dirsrv_replication_user_password) }}"
