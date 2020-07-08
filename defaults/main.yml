@@ -8,7 +8,7 @@ dirsrv_tls_certificate_trusted: true
 dirsrv_serverid: default
 dirsrv_suffix: dc=example,dc=local
 
-# SIMPLE, PLAIN, SASL. 
+# SIMPLE, PLAIN, SASL.
 dirsrv_replica_bind_method: 'PLAIN'
 
 #####################
