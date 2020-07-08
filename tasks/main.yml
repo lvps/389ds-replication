@@ -10,15 +10,6 @@
       - dirsrv_instance_is_consumer or dirsrv_instance_is_supplier
     msg: "This server is neither a consumer nor a supplier. Check that \"dirsrv_replica_role\" is set correctly."
 
-- name: Prepare LDAP auth data
-  set_fact:
-    dirsrv_ldap_auth:
-      server_uri: "{{ dirsrv_uri }}"
-      validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-      start_tls: "{{ dirsrv_use_starttls }}"
-      bind_dn: "{{ dirsrv_rootdn }}"
-      bind_pw: "{{ dirsrv_rootdn_password }}"
-
 # There are 3 possible configurations:
 # Supplier ONLY: ✔ changelog, ✔ supplier config, ✘ consumer config, ✔ replication agreement, ✘ replication user.
 # Consumer ONLY: ✘ changelog, ✘ supplier config, ✔ consumer config, ✘ replication agreement, ✔ replication user.
