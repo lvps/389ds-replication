@@ -29,7 +29,7 @@
       nsds5replicaport: "{{ '389' if not dirsrv_consumer_uri|urlsplit('port') else dirsrv_consumer_uri|urlsplit('port') }}"
       nsds5ReplicaBindDN: "cn={{ dirsrv_replication_user_remote | default(dirsrv_replication_user) }},cn=config"
       nsds5ReplicaCredentials: "{{ dirsrv_replication_user_password_remote | default(dirsrv_replication_user_password) }}"
-      nsds5replicabindmethod: SIMPLE
+      nsds5replicabindmethod: "{{ dirsrv_replica_bind_method }}"
       nsds5replicaroot: "{{ dirsrv_suffix }}"
       description: "Agreement between this server (supplier) and {{ dirsrv_consumer_uri }} (consumer). Managed by Ansible."
       nsds5replicatedattributelist: "{{ dirsrv_replica_attributes_list }}"
@@ -51,7 +51,7 @@
   loop:
     - { name: "nsds5replicaport", value: "{{ '389' if not dirsrv_consumer_uri|urlsplit('port') else dirsrv_consumer_uri|urlsplit('port') }}" }
     - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user_remote | default(dirsrv_replication_user) }},cn=config" }
-    - { name: "nsds5replicabindmethod", value: "SIMPLE" }  # TODO: SASL/PLAIN doesn't seem to be allowed?
+    - { name: "nsds5replicabindmethod", value: "{{ dirsrv_replica_bind_method }}" }
     - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
     - { name: "description", value: "Agreement between this server (supplier) and {{ dirsrv_consumer_uri }} (consumer). Managed by Ansible." }
     - { name: "nsds5replicatedattributelist", value: "{{ dirsrv_replica_attributes_list }}" }
