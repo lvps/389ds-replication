@@ -13,7 +13,7 @@
   ldap_entry:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-    start_tls: "{{ dirsrv_starttls_early }}"
+    start_tls: "{{ dirsrv_use_starttls }}"
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix  }}\",cn=mapping tree,cn=config"
@@ -41,7 +41,7 @@
   ldap_attr:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-    start_tls: "{{ dirsrv_starttls_early }}"
+    start_tls: "{{ dirsrv_use_starttls }}"
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix  }}\",cn=mapping tree,cn=config"
@@ -63,7 +63,7 @@
   ldap_attr:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-    start_tls: "{{ dirsrv_starttls_early }}"
+    start_tls: "{{ dirsrv_use_starttls }}"
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_agreement_cn }},cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
