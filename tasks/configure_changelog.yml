@@ -18,7 +18,7 @@
     state: present
 
 - name: Configure changelog
-  ldap_attr:
+  ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -28,6 +28,6 @@
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
-  loop:
-    - { name: "nsslapd-changelogdir", value: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb" }
-    - { name: "nsslapd-changelogmaxage", value: "{{ dirsrv_changelog_max_age }}" }
+    attributes:
+      nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
+      nsslapd-changelogmaxage: "{{ dirsrv_changelog_max_age }}"

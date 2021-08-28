@@ -1,9 +1,10 @@
 ---
 galaxy_info:
   author: lvps
+  role_name: 389ds_replication
   description: Configure replication between 389DS server (LDAP server) instances.
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: 2.7
   platforms:
     - name: EL
       versions:

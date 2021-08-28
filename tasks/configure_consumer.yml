@@ -20,7 +20,7 @@
     state: present
 
 - name: Configure Consumer Replica Entry
-  ldap_attr:
+  ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -30,13 +30,13 @@
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
-  loop:
-    - { name: "nsds5replicaroot", value: "{{ dirsrv_suffix }}" }
-    - { name: "nsds5ReplicaBindDN", value: "cn={{ dirsrv_replication_user }},cn=config" }
-    - { name: "nsds5flags", value: "0" }  # 0 = does not write to changelog = is a consumer
+    attributes:
+      nsds5replicaroot: "{{ dirsrv_suffix }}"
+      nsds5ReplicaBindDN: "cn={{ dirsrv_replication_user }},cn=config"
+      nsds5flags: "0"  # 0 = does not write to changelog = is a consumer
 
 - name: Configure referral
-  ldap_attr:
+  ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -46,8 +46,8 @@
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
-  loop:
-    - { name: "nsslapd-referral", value: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://\
+    attributes:
+      nsslapd-referral: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://\
     {{ dirsrv_consumer_referral_to_supplier | urlsplit('netloc') }}\
-    /{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}" }
-    - { name: "nsslapd-state", value: "referral on update" }
+    /{{ dirsrv_suffix | replace('\"', '\\\"') | replace(',', '\\,') }}"
+      nsslapd-state: "referral on update"

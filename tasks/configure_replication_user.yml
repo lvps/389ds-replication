@@ -20,7 +20,7 @@
 
 # Allows password change, since if entry exists, ldap_entry doesn't update attributes
 - name: Set "supplier bind DN entry" attributes
-  ldap_attr:
+  ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -30,6 +30,6 @@
     name: "{{ item.name }}"
     values: "{{ item.value }}"
     state: exact
-  loop:
-    - { name: "userPassword", value: "{{ dirsrv_replication_user_password }}" }
+    attributes:
+      userPassword: "{{ dirsrv_replication_user_password }}"
   changed_when: false  # Password always changes, but doesn't really change
