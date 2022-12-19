@@ -27,8 +27,6 @@
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn=replica,cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
-    name: "{{ item.name }}"
-    values: "{{ item.value }}"
     state: exact
     attributes:
       nsds5replicaroot: "{{ dirsrv_suffix }}"
@@ -43,8 +41,6 @@
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn=\"{{ dirsrv_suffix }}\",cn=mapping tree,cn=config"
-    name: "{{ item.name }}"
-    values: "{{ item.value }}"
     state: exact
     attributes:
       nsslapd-referral: "{{ dirsrv_consumer_referral_to_supplier | urlsplit('scheme') }}://\

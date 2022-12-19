@@ -27,8 +27,6 @@
     bind_dn: "{{ dirsrv_rootdn }}"
     bind_pw: "{{ dirsrv_rootdn_password }}"
     dn: "cn={{ dirsrv_replication_user }},cn=config"
-    name: "{{ item.name }}"
-    values: "{{ item.value }}"
     state: exact
     attributes:
       userPassword: "{{ dirsrv_replication_user_password }}"
