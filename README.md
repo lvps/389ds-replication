@@ -20,7 +20,7 @@ If Ansible does not support the `ldap_attrs` module you're using an old version 
 | Variable                                | Default                                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                              | Can be changed | Role |
 |-----------------------------------------|--------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|------|
 | dirsv_replication_role                  |                                                                                | Role of this server: 'supplier', 'consumer' or 'both' (master). Hub is not supported.                                                                                                                                                                                                                                                                                                                                    | **No**         |      |
-| dirsrv_uri                              | "ldap://localhost"                                                             | URI of the server to configure. Since this runs on the Ansible target, localhost should be fine. It's possible to set it to `ldaps://localhost` to use TLS on port 636.                                                                                                                                                                                                                                                  |                | CSB  |
+| dirsrv_server_uri                       | "ldap://localhost"                                                             | URI of the server to configure. Since this runs on the Ansible target, localhost should be fine. It's possible to set it to `ldaps://localhost` to use TLS on port 636.                                                                                                                                                                                                                                                  |                | CSB  |
 | dirsrv_rootdn                           | "cn=Directory Manager"                                                         | Root DN ("administrator" account username)                                                                                                                                                                                                                                                                                                                                                                               |                | CSB  |
 | dirsrv_rootdn_password                  | secret                                                                         | Password for root DN account                                                                                                                                                                                                                                                                                                                                                                                             |                | CSB  |
 | dirsrv_use_starttls                     | true                                                                           | Use StartTLS to connect to the server                                                                                                                                                                                                                                                                                                                                                                                    |                | CSB  |
@@ -107,7 +107,7 @@ database:
       role: lvps.389ds_replication
       dirsrv_replica_role: consumer
       dirsrv_suffix: "dc=example,dc=local"
-      dirsrv_uri: "ldap://localhost"
+      dirsrv_server_uri: "ldap://localhost"
       dirsrv_rootdn_password: secret
       dirsrv_replication_user_password: foo # Will create cn=Replication Manager,cn=config with this password
       dirsrv_consumer_referral_to_supplier: "ldap://supplier.example.local:389/"
@@ -125,7 +125,7 @@ to the consumer:
       role: lvps.389ds_replication
       dirsrv_replica_role: supplier
       dirsrv_suffix: "dc=example,dc=local"
-      dirsrv_uri: "ldap://localhost"
+      dirsrv_server_uri: "ldap://localhost"
       dirsrv_rootdn_password: verysecret
       dirsrv_replication_user_password_remote: foo # Will bind with cn=Replication Manager,cn=config and this password on the other server
       dirsrv_consumer_uri: "ldap://consumer.example.local:389/" # The other server (the consumer defined above)
@@ -142,7 +142,7 @@ to the consumer:
       role: lvps.389ds_replication
       dirsrv_replica_role: 'both'
       dirsrv_suffix: "dc=example,dc=local"
-      dirsrv_uri: "ldap://localhost"
+      dirsrv_server_uri: "ldap://localhost"
       dirsrv_rootdn_password: secret1
       dirsrv_replication_user_password: "aaaaaa"
       dirsrv_replication_user_password_remote: "bbbbbb" # On the other server
@@ -158,7 +158,7 @@ to the consumer:
       role: lvps.389ds_replication
       dirsrv_replica_role: 'both'
       dirsrv_suffix: "dc=example,dc=local"
-      dirsrv_uri: "ldap://localhost"
+      dirsrv_server_uri: "ldap://localhost"
       dirsrv_rootdn_password: secret2
       dirsrv_replication_user_password: "bbbbbb"
       dirsrv_replication_user_password_remote: "aaaaaa" # On the other server
