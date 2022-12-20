@@ -1,5 +1,5 @@
 ---
-dirsrv_uri: "ldap://localhost"
+dirsrv_server_uri: "ldap://localhost"
 dirsrv_rootdn: "cn=Directory Manager"
 # dirsrv_rootdn_password: secret
 dirsrv_use_starttls: true
