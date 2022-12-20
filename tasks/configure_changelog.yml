@@ -1,33 +1,36 @@
 ---
-- name: Create changelog configuration entry
-  ldap_entry:
-    server_uri: "{{ dirsrv_server_uri }}"
-    validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-    start_tls: "{{ dirsrv_use_starttls }}"
-    bind_dn: "{{ dirsrv_rootdn }}"
-    bind_pw: "{{ dirsrv_rootdn_password }}"
-    dn: "cn=changelog5,cn=config"
-    objectClass:
-      - top
-      - extensibleObject
-    attributes:
-      cn: "changelog5"
-      # Fails if this is not set, although it's not a MUST attribute
-      # (but there's dark magic taking place with extensibleObject)
-      nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
-    state: present
+- name: Determine if we need to use "cn=changelog5,cn=config" or not
+  block:
+    - name: Create changelog configuration entry
+      ldap_entry:
+        server_uri: "{{ dirsrv_server_uri }}"
+        validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+        start_tls: "{{ dirsrv_use_starttls }}"
+        bind_dn: "{{ dirsrv_rootdn }}"
+        bind_pw: "{{ dirsrv_rootdn_password }}"
+        dn: "cn=changelog5,cn=config"
+        objectClass:
+          - top
+          - extensibleObject
+        attributes:
+          cn: "changelog5"
+          # Fails if this is not set, although it's not a MUST attribute
+          # (but there's dark magic taking place with extensibleObject)
+          nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
+        state: present
 
-- name: Configure changelog
-  ldap_attrs:
-    server_uri: "{{ dirsrv_server_uri }}"
-    validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
-    start_tls: "{{ dirsrv_use_starttls }}"
-    bind_dn: "{{ dirsrv_rootdn }}"
-    bind_pw: "{{ dirsrv_rootdn_password }}"
-    dn: "cn=changelog5,cn=config"
-    name: "{{ item.name }}"
-    values: "{{ item.value }}"
-    state: exact
-    attributes:
-      nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
-      nsslapd-changelogmaxage: "{{ dirsrv_changelog_max_age }}"
+    - name: Configure changelog
+      ldap_attrs:
+        server_uri: "{{ dirsrv_server_uri }}"
+        validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
+        start_tls: "{{ dirsrv_use_starttls }}"
+        bind_dn: "{{ dirsrv_rootdn }}"
+        bind_pw: "{{ dirsrv_rootdn_password }}"
+        dn: "cn=changelog5,cn=config"
+        name: "{{ item.name }}"
+        values: "{{ item.value }}"
+        state: exact
+        attributes:
+          nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
+          nsslapd-changelogmaxage: "{{ dirsrv_changelog_max_age }}"
+  when: "ansible_facts['distribution_major_version'] | int >= 8"
