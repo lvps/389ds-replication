@@ -33,4 +33,4 @@
         attributes:
           nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
           nsslapd-changelogmaxage: "{{ dirsrv_changelog_max_age }}"
-  when: "ansible_facts['distribution_major_version'] | int >= 8"
+  when: "ansible_facts['distribution_major_version'] | int <= 8"
