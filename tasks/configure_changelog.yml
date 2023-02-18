@@ -27,8 +27,6 @@
         bind_dn: "{{ dirsrv_rootdn }}"
         bind_pw: "{{ dirsrv_rootdn_password }}"
         dn: "cn=changelog5,cn=config"
-        name: "{{ item.name }}"
-        values: "{{ item.value }}"
         state: exact
         attributes:
           nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
