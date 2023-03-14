@@ -1,6 +1,6 @@
 ---
 - name: Create Supplier Replica Entry
-  ldap_entry:
+  community.general.ldap_entry:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -20,7 +20,7 @@
     state: present
 
 - name: Configure Supplier Replica Entry
-  ldap_attrs:
+  community.general.ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"

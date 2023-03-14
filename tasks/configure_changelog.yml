@@ -1,5 +1,6 @@
 ---
 - name: Determine if we need to use "cn=changelog5,cn=config" or not
+  when: "ansible_facts['distribution_major_version'] | int <= 8"
   block:
     - name: Create changelog configuration entry
       ldap_entry:
@@ -31,4 +32,3 @@
         attributes:
           nsslapd-changelogdir: "/var/lib/dirsrv/slapd-{{ dirsrv_serverid }}/changelogdb"
           nsslapd-changelogmaxage: "{{ dirsrv_changelog_max_age }}"
-  when: "ansible_facts['distribution_major_version'] | int <= 8"
