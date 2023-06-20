@@ -1,7 +1,7 @@
 ---
 # The supplier will bind with this account on the consumer, so the account should exist on the consumer
 - name: Add "supplier bind DN entry" to consumer
-  ldap_entry:
+  community.general.ldap_entry:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -17,10 +17,12 @@
       userPassword: "{{ dirsrv_replication_user_password }}"
       nsIdleTimeout: 0  # TODO: make this configurable? 0 is only needed for initialization, since it may take a long time
     state: present
+  tags:
+    - changelog
 
 # Allows password change, since if entry exists, ldap_entry doesn't update attributes
 - name: Set "supplier bind DN entry" attributes
-  ldap_attrs:
+  community.general.ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -31,3 +33,5 @@
     attributes:
       userPassword: "{{ dirsrv_replication_user_password }}"
   changed_when: false  # Password always changes, but doesn't really change
+  tags:
+    - changelog

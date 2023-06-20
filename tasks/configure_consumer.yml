@@ -1,6 +1,6 @@
 ---
 - name: Create Consumer Replica Entry
-  ldap_entry:
+  community.general.ldap_entry:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -20,7 +20,7 @@
     state: present
 
 - name: Configure Consumer Replica Entry
-  ldap_attrs:
+  community.general.ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
@@ -34,7 +34,7 @@
       nsds5flags: "0"  # 0 = does not write to changelog = is a consumer
 
 - name: Configure referral
-  ldap_attrs:
+  community.general.ldap_attrs:
     server_uri: "{{ dirsrv_server_uri }}"
     validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
     start_tls: "{{ dirsrv_use_starttls }}"
