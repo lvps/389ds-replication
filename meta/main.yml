@@ -1,14 +1,26 @@
 ---
 galaxy_info:
   author: lvps
+  namespace: lvps
   role_name: 389ds_replication
-  description: Configure replication between 389DS server (LDAP server) instances.
+  description: >
+    Configure replication between 389DS server (LDAP server) instances.
   license: MIT
   min_ansible_version: "2.7"
+
+  galaxy_tags:
+    - ldap
+    - 389ds
+
   platforms:
     - name: EL
       versions:
-        - "7"
-  galaxy_tags:
-    - ldap
+        - 7
+        - 8
+        - 9
+    - name: opensuse
+    - name: SLES
+
+# Can only depend on Roles, not collections.
+# See: https://github.com/ansible/ansible/issues/76030
 dependencies: []
