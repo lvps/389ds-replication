@@ -1,6 +1,6 @@
 # 389ds-replication
 
-[![Ansible Galaxy](https://img.shields.io/ansible/role/40566.svg)](https://galaxy.ansible.com/lvps/389ds_replication)
+[![Ansible Role](https://img.shields.io/ansible/role/d/lvps/389ds_replication)](https://galaxy.ansible.com/lvps/389ds_replication/)
 
 Configure replication between 389DS server (LDAP server) instances.
 
