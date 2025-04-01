@@ -1,3 +1,0 @@
-# This file contains ignores rule violations for ansible-lint
-meta/main.yml role-name
-meta/main.yml schema[meta]

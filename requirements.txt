@@ -1,0 +1,5 @@
+-i https://pypi.org/simple
+ansible
+ansible-core; python_version >= '3.11'
+ansible-lint
+yamllint

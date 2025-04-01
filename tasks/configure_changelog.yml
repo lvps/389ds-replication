@@ -3,7 +3,7 @@
   when: "ansible_facts['distribution_major_version'] | int <= 8"
   block:
     - name: Create changelog configuration entry
-      ldap_entry:
+      community.general.ldap_entry:
         server_uri: "{{ dirsrv_server_uri }}"
         validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
         start_tls: "{{ dirsrv_use_starttls }}"
@@ -21,7 +21,7 @@
         state: present
 
     - name: Configure changelog
-      ldap_attrs:
+      community.general.ldap_attrs:
         server_uri: "{{ dirsrv_server_uri }}"
         validate_certs: "{{ dirsrv_tls_certificate_trusted }}"
         start_tls: "{{ dirsrv_use_starttls }}"

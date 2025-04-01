@@ -1,5 +1,6 @@
 # 389ds-replication
 
+![Build Status](https://github.com/lvps/389ds-replication/actions/workflows/lint.yml/badge.svg)
 [![Ansible Role](https://img.shields.io/ansible/role/d/lvps/389ds_replication)](https://galaxy.ansible.com/lvps/389ds_replication/)
 
 Configure replication between 389DS server (LDAP server) instances.
