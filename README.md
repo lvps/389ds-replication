@@ -12,7 +12,7 @@ ansible-galaxy install lvps.389ds_replication
 ## Requirements
 
 - Ansible version: 2.7 or higher
-- OS: CentOS 7
+- OS: RHEL/Rocky/EL 7/8/9/..., OpenSUSE/SLES
 
 If Ansible does not support the `ldap_attrs` module you're using an old version of collections, but you can try version 1.0.x of this role.
 
